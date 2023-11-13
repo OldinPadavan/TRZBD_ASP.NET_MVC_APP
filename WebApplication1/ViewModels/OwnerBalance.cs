@@ -9,9 +9,11 @@ namespace WebApplication1.ViewModels
 {
 	public class OwnerBalance
 	{
-		[DataType(DataType.Currency)]
-		public decimal? Balance { get; set; }
-
+		
 		public Owner Owner { get; set; }
+
+		public Flat Flat {  get; set; }
+		public int OwnerFlatCount { get; set; }
+
 	}
 }

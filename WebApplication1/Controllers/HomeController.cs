@@ -10,7 +10,7 @@ namespace WebApplication1.Controllers
 {
 	public class HomeController : Controller
 	{
-	
+		private RentControllBDEntities dbEntity = new RentControllBDEntities();
 		public ActionResult Index ( )
 		{
 			return View();
@@ -18,9 +18,23 @@ namespace WebApplication1.Controllers
 
 		public ActionResult About ( )
 		{
-			ViewBag.Message = "Your application description page.";
+			IQueryable<OwnerBalance> allOwner = from
+				flat in dbEntity.Flats
+					group flat by flat.Owner into ownerBalanceGroup
+					select new OwnerBalance()
+					{
+						Owner = ownerBalanceGroup.Key,
+						OwnerFlatCount = ownerBalanceGroup.Count(),
+						
+					};		
 
-			return View();
+			return View(allOwner.ToList());
+		}
+
+		protected override void Dispose ( bool disposing )
+		{
+			dbEntity.Dispose();
+			base.Dispose ( disposing );
 		}
 
 		public ActionResult Contact ( )

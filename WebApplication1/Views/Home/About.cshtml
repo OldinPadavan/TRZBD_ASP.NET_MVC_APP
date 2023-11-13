@@ -1,9 +1,30 @@
-﻿@{
-    ViewBag.Title = "About";
+﻿@model IEnumerable<WebApplication1.ViewModels.OwnerBalance>
+@{
+    ViewBag.Title = "Статистика";
 }
 <main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
+    <table>
+        <tr>
+            <th>
+                Фамилия владельца
+            </th>
+            <th>
+                Количество квартир
+            </th>
+        </tr>
 
-    <p>Use this area to provide additional information.</p>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Owner.Last_name)
+                </td>
+                <td>
+                    @item.OwnerFlatCount
+                </td>
+            </tr>
+        }
+    </table>
+
 </main>
