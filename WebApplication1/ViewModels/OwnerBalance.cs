@@ -12,6 +12,7 @@ namespace WebApplication1.ViewModels
 		
 		public Owner Owner { get; set; }
 
+		public Bill Bill { get; set; }	
 		public Flat Flat {  get; set; }
 		public int OwnerFlatCount { get; set; }
 

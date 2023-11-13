@@ -11,20 +11,29 @@ namespace WebApplication1.Models
 {
     using System;
     using System.Collections.Generic;
-    
+	using System.ComponentModel;
+
     public partial class Building
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Building()
+        public Building ( )
         {
             this.Flats = new HashSet<Flat>();
         }
-    
+
         public int Id { get; set; }
+
+        [DisplayName("Площадь дома")]
         public decimal Square { get; set; }
+
+        [DisplayName("Количество этажей")]
         public int Flat_numbers { get; set; }
+
+        [DisplayName("Адрес")]
         public string Address { get; set; }
-        public int Managment_company_id { get; set; }
+
+		[DisplayName("Имя управляющей компании")]
+		public int Managment_company_id { get; set; }
     
         public virtual Managment_company Managment_company { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

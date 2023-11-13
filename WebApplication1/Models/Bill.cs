@@ -11,14 +11,20 @@ namespace WebApplication1.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Bill
-    {
+	using System.ComponentModel;
+
+	public partial class Bill
+	{
         public int Id { get; set; }
-        public System.DateTime Date { get; set; }
-        public decimal Amount { get; set; }
-        public string Paper_bill_link { get; set; }
-        public int Flat_id { get; set; }
+
+		[DisplayName("Дата")]
+		public System.DateTime Date { get; set; }
+		[DisplayName("Сумма")]
+		public decimal Amount { get; set; }
+		[DisplayName("Ссылка на счет")]
+		public string Paper_bill_link { get; set; }
+		[DisplayName("Уникальный код квартиры")]
+		public int Flat_id { get; set; }
     
         public virtual Flat Flat { get; set; }
     }

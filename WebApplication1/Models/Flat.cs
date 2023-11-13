@@ -11,9 +11,10 @@ namespace WebApplication1.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Flat
-    {
+	using System.ComponentModel;
+
+	public partial class Flat
+	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Flat()
         {
@@ -21,10 +22,15 @@ namespace WebApplication1.Models
         }
     
         public int Id { get; set; }
-        public int Flat_number { get; set; }
-        public decimal Flat_square { get; set; }
-        public int Building_id { get; set; }
-        public int Flat_owner_id { get; set; }
+		[DisplayName("Номер квартиры")]
+		public int Flat_number { get; set; }
+		[DisplayName("Площадь")]
+		public decimal Flat_square { get; set; }
+
+		[DisplayName("Адрес")]
+		public int Building_id { get; set; }
+		[DisplayName("Фамилия владельца")]
+		public int Flat_owner_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bill> Bills { get; set; }
