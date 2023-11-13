@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RentControllBDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bills">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Amount" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Paper_bill_link" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Flat_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Building">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Square" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Flat_numbers" Type="int" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Managment_company_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Flat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Flat_number" Type="int" Nullable="false" />
+          <Property Name="Flat_square" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Building_id" Type="int" Nullable="false" />
+          <Property Name="Flat_owner_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Managment_company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="INN" Type="int" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Phone_number" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ManagmentCompany_Employees">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Last_name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="First_name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Middle_name" Type="nvarchar" MaxLength="128" />
+          <Property Name="Company_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Owner">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Last_name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="First_name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Middle_name" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <Association Name="FK_Bills_Flat">
+          <End Role="Flat" Type="Self.Flat" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Bills" Type="Self.Bills" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flat">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bills">
+              <PropertyRef Name="Flat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Building_Managment_company">
+          <End Role="Managment_company" Type="Self.Managment_company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Building" Type="Self.Building" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Managment_company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Building">
+              <PropertyRef Name="Managment_company_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Falt_Building">
+          <End Role="Building" Type="Self.Building" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Flat" Type="Self.Flat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flat">
+              <PropertyRef Name="Building_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flat_Owner">
+          <End Role="Owner" Type="Self.Owner" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Flat" Type="Self.Flat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flat">
+              <PropertyRef Name="Flat_owner_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ManagmenetCompany_Employees_ManagementCompany">
+          <End Role="Managment_company" Type="Self.Managment_company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ManagmentCompany_Employees" Type="Self.ManagmentCompany_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Managment_company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ManagmentCompany_Employees">
+              <PropertyRef Name="Company_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RentControllBDModelStoreContainer">
+          <EntitySet Name="Bills" EntityType="Self.Bills" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Building" EntityType="Self.Building" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Flat" EntityType="Self.Flat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Managment_company" EntityType="Self.Managment_company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ManagmentCompany_Employees" EntityType="Self.ManagmentCompany_Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Owner" EntityType="Self.Owner" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Bills_Flat" Association="Self.FK_Bills_Flat">
+            <End Role="Flat" EntitySet="Flat" />
+            <End Role="Bills" EntitySet="Bills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Building_Managment_company" Association="Self.FK_Building_Managment_company">
+            <End Role="Managment_company" EntitySet="Managment_company" />
+            <End Role="Building" EntitySet="Building" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Falt_Building" Association="Self.FK_Falt_Building">
+            <End Role="Building" EntitySet="Building" />
+            <End Role="Flat" EntitySet="Flat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flat_Owner" Association="Self.FK_Flat_Owner">
+            <End Role="Owner" EntitySet="Owner" />
+            <End Role="Flat" EntitySet="Flat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ManagmenetCompany_Employees_ManagementCompany" Association="Self.FK_ManagmenetCompany_Employees_ManagementCompany">
+            <End Role="Managment_company" EntitySet="Managment_company" />
+            <End Role="ManagmentCompany_Employees" EntitySet="ManagmentCompany_Employees" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RentControllBDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Paper_bill_link" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Flat_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Flat" Relationship="Self.FK_Bills_Flat" FromRole="Bills" ToRole="Flat" />
+        </EntityType>
+        <EntityType Name="Building">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Square" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Flat_numbers" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Managment_company_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Managment_company" Relationship="Self.FK_Building_Managment_company" FromRole="Building" ToRole="Managment_company" />
+          <NavigationProperty Name="Flats" Relationship="Self.FK_Falt_Building" FromRole="Building" ToRole="Flat" />
+        </EntityType>
+        <EntityType Name="Flat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Flat_number" Type="Int32" Nullable="false" />
+          <Property Name="Flat_square" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Building_id" Type="Int32" Nullable="false" />
+          <Property Name="Flat_owner_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Bills" Relationship="Self.FK_Bills_Flat" FromRole="Flat" ToRole="Bills" />
+          <NavigationProperty Name="Building" Relationship="Self.FK_Falt_Building" FromRole="Flat" ToRole="Building" />
+          <NavigationProperty Name="Owner" Relationship="Self.FK_Flat_Owner" FromRole="Flat" ToRole="Owner" />
+        </EntityType>
+        <EntityType Name="Managment_company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="INN" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone_number" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Buildings" Relationship="Self.FK_Building_Managment_company" FromRole="Managment_company" ToRole="Building" />
+          <NavigationProperty Name="ManagmentCompany_Employees" Relationship="Self.FK_ManagmenetCompany_Employees_ManagementCompany" FromRole="Managment_company" ToRole="ManagmentCompany_Employees" />
+        </EntityType>
+        <EntityType Name="ManagmentCompany_Employees">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Last_name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="First_name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Middle_name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Company_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Managment_company" Relationship="Self.FK_ManagmenetCompany_Employees_ManagementCompany" FromRole="ManagmentCompany_Employees" ToRole="Managment_company" />
+        </EntityType>
+        <EntityType Name="Owner">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Last_name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="First_name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Middle_name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Flats" Relationship="Self.FK_Flat_Owner" FromRole="Owner" ToRole="Flat" />
+        </EntityType>
+        <Association Name="FK_Bills_Flat">
+          <End Role="Flat" Type="Self.Flat" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Bills" Type="Self.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flat">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bills">
+              <PropertyRef Name="Flat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Building_Managment_company">
+          <End Role="Managment_company" Type="Self.Managment_company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Building" Type="Self.Building" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Managment_company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Building">
+              <PropertyRef Name="Managment_company_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Falt_Building">
+          <End Role="Building" Type="Self.Building" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Flat" Type="Self.Flat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flat">
+              <PropertyRef Name="Building_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flat_Owner">
+          <End Role="Owner" Type="Self.Owner" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Flat" Type="Self.Flat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flat">
+              <PropertyRef Name="Flat_owner_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ManagmenetCompany_Employees_ManagementCompany">
+          <End Role="Managment_company" Type="Self.Managment_company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ManagmentCompany_Employees" Type="Self.ManagmentCompany_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Managment_company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ManagmentCompany_Employees">
+              <PropertyRef Name="Company_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RentControllBDEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bills" EntityType="Self.Bill" />
+          <EntitySet Name="Buildings" EntityType="Self.Building" />
+          <EntitySet Name="Flats" EntityType="Self.Flat" />
+          <EntitySet Name="Managment_company" EntityType="Self.Managment_company" />
+          <EntitySet Name="ManagmentCompany_Employees" EntityType="Self.ManagmentCompany_Employees" />
+          <EntitySet Name="Owners" EntityType="Self.Owner" />
+          <AssociationSet Name="FK_Bills_Flat" Association="Self.FK_Bills_Flat">
+            <End Role="Flat" EntitySet="Flats" />
+            <End Role="Bills" EntitySet="Bills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Building_Managment_company" Association="Self.FK_Building_Managment_company">
+            <End Role="Managment_company" EntitySet="Managment_company" />
+            <End Role="Building" EntitySet="Buildings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Falt_Building" Association="Self.FK_Falt_Building">
+            <End Role="Building" EntitySet="Buildings" />
+            <End Role="Flat" EntitySet="Flats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flat_Owner" Association="Self.FK_Flat_Owner">
+            <End Role="Owner" EntitySet="Owners" />
+            <End Role="Flat" EntitySet="Flats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ManagmenetCompany_Employees_ManagementCompany" Association="Self.FK_ManagmenetCompany_Employees_ManagementCompany">
+            <End Role="Managment_company" EntitySet="Managment_company" />
+            <End Role="ManagmentCompany_Employees" EntitySet="ManagmentCompany_Employees" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RentControllBDModelStoreContainer" CdmEntityContainer="RentControllBDEntities">
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="RentControllBDModel.Bill">
+              <MappingFragment StoreEntitySet="Bills">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Paper_bill_link" ColumnName="Paper_bill_link" />
+                <ScalarProperty Name="Flat_id" ColumnName="Flat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Buildings">
+            <EntityTypeMapping TypeName="RentControllBDModel.Building">
+              <MappingFragment StoreEntitySet="Building">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Square" ColumnName="Square" />
+                <ScalarProperty Name="Flat_numbers" ColumnName="Flat_numbers" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Managment_company_id" ColumnName="Managment_company_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Flats">
+            <EntityTypeMapping TypeName="RentControllBDModel.Flat">
+              <MappingFragment StoreEntitySet="Flat">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Flat_number" ColumnName="Flat_number" />
+                <ScalarProperty Name="Flat_square" ColumnName="Flat_square" />
+                <ScalarProperty Name="Building_id" ColumnName="Building_id" />
+                <ScalarProperty Name="Flat_owner_id" ColumnName="Flat_owner_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Managment_company">
+            <EntityTypeMapping TypeName="RentControllBDModel.Managment_company">
+              <MappingFragment StoreEntitySet="Managment_company">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="INN" ColumnName="INN" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone_number" ColumnName="Phone_number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ManagmentCompany_Employees">
+            <EntityTypeMapping TypeName="RentControllBDModel.ManagmentCompany_Employees">
+              <MappingFragment StoreEntitySet="ManagmentCompany_Employees">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Last_name" ColumnName="Last_name" />
+                <ScalarProperty Name="First_name" ColumnName="First_name" />
+                <ScalarProperty Name="Middle_name" ColumnName="Middle_name" />
+                <ScalarProperty Name="Company_id" ColumnName="Company_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Owners">
+            <EntityTypeMapping TypeName="RentControllBDModel.Owner">
+              <MappingFragment StoreEntitySet="Owner">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Last_name" ColumnName="Last_name" />
+                <ScalarProperty Name="First_name" ColumnName="First_name" />
+                <ScalarProperty Name="Middle_name" ColumnName="Middle_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
